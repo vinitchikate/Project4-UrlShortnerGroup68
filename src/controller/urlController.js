@@ -26,7 +26,6 @@ const urlShorten = async function (req, res) {
 
 
 const urlCode = async function (req, res) {
-    const getUrl = async function (req, res) {
     try {
         let urlCode = req.params.urlCode
 
@@ -39,7 +38,6 @@ const urlCode = async function (req, res) {
     } catch (err) {
         res.status(500).send({ status: false, message: err.message })
     }
-}
 };
 
 
