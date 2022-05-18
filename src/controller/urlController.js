@@ -1,4 +1,8 @@
+const validurl = require('valid-url');
 const shortid = require('shortid');
+const urlModel = require('../models/urlModel');
+
+
 
 const urlShorten = async function (req, res) {
     try {
@@ -11,12 +15,15 @@ const urlShorten = async function (req, res) {
             shortUrl: shortUrl,
             urlCode: urlCode
         };
-        res.status(200).send({ data: data });
+        const saveData = await urlModel.create(data);
+        res.status(200).send({ data: saveData });
     }
     catch (err) {
         res.status(500).send(err.message);
     }
-}
+};
+
+
 
 const urlCode = async function (req, res) {
     try {
@@ -25,6 +32,8 @@ const urlCode = async function (req, res) {
     catch (err) {
         res.status(500).send(err.message);
     }
-}
+};
+
+
 
 module.exports = { urlShorten, urlCode };
