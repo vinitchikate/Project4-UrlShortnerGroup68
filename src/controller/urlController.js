@@ -26,12 +26,20 @@ const urlShorten = async function (req, res) {
 
 
 const urlCode = async function (req, res) {
+    const getUrl = async function (req, res) {
     try {
-        res.status(200).send({ status: true });
+        let urlCode = req.params.urlCode
+
+        let findUrl = await urlModel.findOne({ urlCode: urlCode })
+        if (!findUrl)
+            return res.status(404).send({ status: false, message: 'URL not found.' })
+
+        res.status(200).send({ status: true, message: 'Redirecting to Original URL.', data: findUrl.longUrl })
+
+    } catch (err) {
+        res.status(500).send({ status: false, message: err.message })
     }
-    catch (err) {
-        res.status(500).send(err.message);
-    }
+}
 };
 
 
