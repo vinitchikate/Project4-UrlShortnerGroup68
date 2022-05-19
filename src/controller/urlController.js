@@ -1,4 +1,3 @@
-const shortid = require('shortid');
 const redis = require("redis");
 const { promisify } = require("util");
 const urlModel = require('../models/urlModel');
@@ -23,8 +22,9 @@ const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 const urlShorten = async function (req, res) {
     try {
         const longUrl = req.body.url;
-        const urlCode = shortid.generate();
+        const urlCode = req.urlCode;
         const shortUrl = "http://localhost:3000/" + urlCode;
+
         const data = {
             longUrl: longUrl,
             shortUrl: shortUrl,
@@ -48,8 +48,10 @@ const urlCode = async function (req, res) {
         let cahcedProfileData = await GET_ASYNC(urlCode);
 
         if (cahcedProfileData) {
+            console.log("From Redis !!!");
             return res.status(302).redirect(cahcedProfileData);
         } else {
+            console.log("From DB !!!");
             let urlFind = await urlModel.findOne({ urlCode });
             const reditData = await SET_ASYNC(urlCode, urlFind.longUrl);
             return res.redirect(urlFind.longUrl);
