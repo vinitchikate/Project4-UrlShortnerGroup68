@@ -2,7 +2,7 @@ const shortid = require('shortid');
 const urlModel = require('../models/urlModel');
 
 function isValidURL(string) {
-    var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+    var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);// check the valid format of LongUrl by using the regex
     return (res !== null)
 };
 
@@ -10,12 +10,12 @@ const urlShorten = async function (req, res, next) {
     try {
         const longUrl = req.body.url;
         if (Object.keys(req.body) == 0) {
-            return res.status(400).send({ status: false, msg: "Plz Enter Url In Body !!!" });
+            return res.status(400).send({ status: false, msg: "Plz Enter Url In Body !!!" });  //longUrl is mandory 
         }
 
         if (isValidURL(longUrl) == true) { // Regex To Validate Url
-            let urlCode = shortid.generate();
-            const shortidFind = await urlModel.findOne({ urlCode: urlCode });
+            let urlCode = shortid.generate();   //Generating unique random code for each & every entry
+            const shortidFind = await urlModel.findOne({ urlCode: urlCode }); //finding the urlCode in the urlModel
 
             if (shortidFind) { //Checking ShortId Is Unique Or Not
                 urlCode = shortid.generate();
