@@ -56,7 +56,7 @@ const urlShorten = async function (req, res) {
         }
 
 
-        const urlCode = shortid.generate();
+        const urlCode = shortid.generate().toLocaleLowerCase();
         const shortUrl = "http://localhost:3000/" + urlCode;
 
 
@@ -84,6 +84,7 @@ const urlCode = async function (req, res) {
 
 
             let urlCode = req.params.urlCode; //Taking urlCode in params
+            console.log(shortid.isValid(urlCode))
             if (shortid.isValid(urlCode) == false) {
                 return res.status(400).send({ status: false, msg: "Plz Enter Valid UrlCode In Params !!!" });
             }
